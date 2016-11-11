@@ -2,10 +2,18 @@
 <html>
 	<head>
 		<script type="text/javascript">
-
+			var x = Math.random();
+			if (x<0.3){
+				console.log(x, "is less than 0.3");
+			}
+			else if(x>0.3 && x<0.6){
+				console.log(x + " is larger than 0.3 and smaller than 0.6");
+			}
+			else {
+				console.log(x + " is larger >=0.6");
+			}
 		</script>
 	</head>
 	<body>
-		
 	</body>
 </html>
