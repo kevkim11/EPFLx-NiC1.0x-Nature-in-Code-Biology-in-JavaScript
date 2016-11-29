@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script type="text/javascript">
+			var number_of_sequences = 100; // essentially our pop size.
+			var sequence_length = 20;
+			var original_sequence = []; //empty array to store original sequence
+			var sequences = [] // population
+
+			var BASES = ['A', 'G', 'C', 'T'];
+			/*
+				Change bases in the DNA string with a certain mutation rate. 
+				Two Variables
+				1) Time/Number of generations - Need to know how many generations I'm actually going to run
+				2) Mutation rate
+			*/
+			var number_of_generations = 100;
+			var mutation_rate = 0.0001; // unit = per base and generation
+
+			// Want to start with the first generation of this population
+			// Start with zero genetic variation, and then we go from there introducing mutation over time.
+			function generate_first_generation(){
+				// 1) Generate a sequence
+				generate_first_sequence();
+				// 2) Copy the generated sequence and store them into an array
+				for (var i = 0; i < number_of_sequences; i+=1) {
+					// Slice - returns a copy of the array that you let the slice method act on
+					sequences.push(original_sequence.slice());
+				}
+			}
+
+			function generate_first_sequence(){
+				for (var i = 0; i<sequence_length; i+=1){
+					original_sequence.push(random_base(""));
+				}
+			}
+
+			function random_base(current_base){
+				// Need Math.random in order to genenerate randomness
+				// Returns a random_base from a set of bases that do not include this current base, so new_base will always 
+				// be different than current base
+				var new_base;
+				/*
+					Purpose of the do-while loop
+					"You're going to choose and index up here
+					and then you're going to pick a base corresponding to this index, but now after you've done this once
+					we're going to check whether this is actuall the same base. "
+				*/
+				do {
+					var index = Math.floor(Math.random()*4);
+					new_base = BASES[index]
+				} while (new_base == current_base);
+				
+				return new_base;
+			}
+
+			function print_sequences(){
+				// loop through all the DNA we have and print them
+				// Add a parameter in order to tell what generations we are on. 
+				for (var i = 0; i < number_of_sequences; i+=1){
+					print_sequence(sequences[i]);
+				}
+			}
+
+			function print_sequence(sequence){
+				var sequence_string = "";
+				for (var i = 0; i < sequence.length; i+=1) {
+					sequence_string = sequence_string + sequence[i];
+				}
+				console.log(sequence_string);
+			}
+
+			function run_generations() {
+				// Introduce temporal dimension and mutations
+				// Threefold nested llop
+				for (var i = 0; i < number_of_generations; i+=1) {
+					// each generation
+					for (var ii = 0; ii < sequences.length; ii += 1) {
+						// each sequence
+						for (var iii = 0; iii < sequences[ii].length; iii += 1) {
+							// each base
+							// Same logic applied to genetic drift --> If random number is smaller than a certain 
+							// value, between zero and one, then it's gonna happen at that rate
+							if (Math.random() < mutation_rate) {
+								sequences[ii][iii] = random_base();
+							}
+						}
+					}
+				}
+			}
+			// Function calls
+			generate_first_generation();
+			print_sequences();
+			// console.log(sequences);
+			run_generations();
+			print_sequences();
+
+		</script>
+	</head>
+
+	<body>
+	</body>
+</html>

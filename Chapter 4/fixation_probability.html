@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+	<!DOCTYPE html>
+	<html>
+	<head>
+		<title></title>
+		<script type="text/javascript">
+			var N = 100;
+			var p = 0.5;
+			var simulations = 10000;
+			var fixations_of_mutant = 0;
+			var total_generations = 0;
+
+			function next_generation() {
+				var draws = 2 * N;
+				var a1 = 0;
+				var a2 = 0;
+
+				for (var i=0; i < draws; i+=1) {
+					if (Math.random() <= p) {
+						a1+=1;
+					}
+					else {
+						a2+=1;
+					}
+				}
+				p = a1/draws;
+			}
+
+			function run_until_fixation(){
+				// set allele frequency (p)
+				p = 1 /(2*N);
+				// How long does it take on average when a single neutral mutant allele goes to fixation
+				var generation = 0; // counter
+				// Stop the loop when p is in fixation (1) (reaches either 0 or 1)
+				// Don't know how many loops to run until fixation aka use do-while
+				do {
+					next_generation();
+					generation +=1
+				} while (p > 0 && p < 1);
+				if (p==1) { // fixation
+					fixations_of_mutant+=1;
+					total_generations += generation;
+				}
+			}
+
+			for (var i = 0; i < simulations; i+=1) {
+				run_until_fixation();
+			}
+			// fixations_of_mutant/simulations = p = 1/(2*N)
+			console.log("p = " + fixations_of_mutant/simulations);
+			// Average number of generations it takes for a fixation for the a1 allele to go to fixation. 
+			console.log("Average number of generations it takes for a fixation for the a1 allele to go to fixation " + total_generations/fixations_of_mutant);
+		</script>
+	</head>
+	<body>
+	
+	</body>
+	</html>
