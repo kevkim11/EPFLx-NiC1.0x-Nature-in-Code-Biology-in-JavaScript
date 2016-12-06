@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		
+	</head>
+	<body>
+		<script type="text/javascript">
+
+			// Global variables
+			var grid_length = 100;
+			var grid = []; // 2-D arrays
+			var p = 0.5;
+			var max_mating_distance = 1;
+			var a1a1 = 0;
+			var a1a2 = 0;
+			var a2a2 = 0;
+			var generation_counter = 0;
+
+			// Functions
+			function init_grid() {
+				/*
+					Initialize grid. 
+				*/
+				for (var i = 0; i < grid_length; i+=1) {
+					grid[i] = [];
+					for (var ii = 0; ii < grid_length; ii+=1) {
+						var random_number = Math.random(); // random number between 0-1
+						// grid[x-coordinage][y-coordinate]
+						if (random_number < p*p) {
+							grid[i][ii] = "A1A1";
+							a1a1+=1;
+						}
+						else if (random_number > 1 - (1-p)*(1-p)){
+							grid[i][ii] = "A2A2";
+							a2a2+=1;
+						}
+						else {
+							grid[i][ii] = "A1A2";
+							a1a2+=1;
+						}
+					}
+				}
+				console.log(a1a1, a1a2, a2a2);
+			}
+
+			function pick_mating_partner(i, ii) {
+
+			}
+
+			function run_generation(){
+				/*
+					Go through each individual/cell, take a look at the individual in that cell, choose a mating
+					partner for that individual, generate the correct offspring given the options and then ultimately replace the parent-generation witht the opssring generation. 
+				*/
+				var temp_grid = [];
+				// Go through each cell in the grid (2d array)
+				for (var i = 0; i < grid_length; i+=1){
+					temp_grid[i] = [];
+					for(var ii = 0; ii < grid_length; ii+=1){
+						var mating_partner = pick_mating_partner(i, ii);
+						temp_grid[i][ii] = get_offspring(grid[i][ii], mating_partner);
+					}
+				}
+				// Copy coordinates from temp_grid to grid
+				for (var i = 0; i < grid_length; i+=1){
+					for(var ii = 0; ii < grid_length; ii+=1){
+						grid[i][ii] = temp_grid[i][ii];
+					}
+				}
+				generation_counter+=1;
+			}
+
+			init_grid();
+
+			for (var i = 0; i < 100; i+=1){
+				run_generation();
+			}
+
+		</script>
+	</body>
+</html>
